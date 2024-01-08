@@ -1,11 +1,14 @@
 package com.saxion.repairprotocol;
 
+import static com.saxion.repairprotocol.MainActivity.textToSpeech;
 import static com.saxion.repairprotocol.ScreenDecision.Screen.firstStep;
 import static com.saxion.repairprotocol.ScreenDecision.Screen.stepData;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -30,6 +33,7 @@ public class WindowText extends AppCompatActivity
         ImageButton btnNextStep = findViewById(R.id.TEXT_nextStep);
         ImageButton btnPrevStep = findViewById(R.id.TEXT_prevStep);
         ImageButton btnHome = findViewById(R.id.TEXT_home);
+        ImageButton btnTxt2Speech = findViewById(R.id.TEXT_txt2speech);
 
         // Set attributes
         txtShortDescription.setText(Objects.toString(stepData[1], ""));
@@ -40,6 +44,14 @@ public class WindowText extends AppCompatActivity
         btnNextStep.setOnClickListener(e -> Screen.openNext(WindowText.this));
         btnPrevStep.setOnClickListener(e -> Screen.openPrevious(WindowText.this));
         btnHome.setOnClickListener(e -> Dialogs.showQuitDialog(WindowText.this));
+        btnTxt2Speech.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                textToSpeech.speak(txtLongDescription.getText().toString(), TextToSpeech.QUEUE_FLUSH, null, null);
+            }
+        });
     }
 
     @Override

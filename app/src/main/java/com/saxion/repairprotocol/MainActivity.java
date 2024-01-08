@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     public static String chosenDirectory;
     public static String chosenSubDirectory;
+    public static TextToSpeech textToSpeech;
 
     private Intent intent;
 
@@ -51,6 +53,27 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
 
         prepareVariables();
+
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener()
+        {
+            @Override
+            public void onInit(int status)
+            {
+                if (status != TextToSpeech.SUCCESS)
+                {
+                    int result = textToSpeech.setLanguage(new Locale("nl", "NL"));
+
+                    if (result == TextToSpeech.LANG_MISSING_DATA || result == TextToSpeech.LANG_NOT_SUPPORTED)
+                    {
+                        Log.e("TextToSpeech", "Language is not supported or missing data");
+                    }
+                }
+                else
+                {
+                    Log.e("TextToSpeech", "Initialization failed");
+                }
+            }
+        });
 
         Thread searchBrands = new Thread(new SearchDIR(MainActivity.this, "smb://" + SERVERPATH));
         searchBrands.start();
